@@ -3,7 +3,7 @@ import { moduleName } from '../assets/const';
 
 const MENU_ITEMS_DEFAULT = {
   insertColumnLeft: {
-    text: '在左侧插入一列',
+    text: 'Sola sütun ekle',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.appendCol();
@@ -11,7 +11,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   insertColumnRight: {
-    text: '在右侧插入一列',
+    text: 'Sağa sütun ekle',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.appendCol(true);
@@ -19,7 +19,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   insertRowTop: {
-    text: '在上方插入一行',
+    text: 'Üste satır ekle',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.appendRow();
@@ -27,7 +27,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   insertRowBottom: {
-    text: '在下方插入一行',
+    text: 'Alta satır ekle',
     groupEnd: true,
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
@@ -36,7 +36,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   removeCol: {
-    text: '删除所在列',
+    text: 'Sütunu sil',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.removeCol();
@@ -44,7 +44,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   removeRow: {
-    text: '删除所在行',
+    text: 'Satırı sil',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.removeRow();
@@ -52,7 +52,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   removeTable: {
-    text: '删除表格',
+    text: 'Tabloyu sil',
     groupEnd: true,
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
@@ -61,7 +61,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   mergeCell: {
-    text: '合并单元格',
+    text: 'Hücreleri birleştir',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.mergeCells();
@@ -69,7 +69,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   splitCell: {
-    text: '拆分单元格',
+    text: 'Hücreyi böl',
     groupEnd: true,
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
@@ -78,7 +78,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   setBackgroundColor: {
-    text: '设置背景颜色',
+    text: 'Arka plan rengini ayarla',
     isColorChoose: true,
     handler(color) {
       const tableModule = this.quill.getModule(moduleName.table);
@@ -86,14 +86,14 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   clearBackgroundColor: {
-    text: '清除背景颜色',
+    text: 'Arka plan rengini temizle',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.setStyle({ backgroundColor: null }, this.selectedTds);
     },
   },
   setBorderColor: {
-    text: '设置边框颜色',
+    text: 'Kenarlık rengini ayarla',
     isColorChoose: true,
     handler(color) {
       const tableModule = this.quill.getModule(moduleName.table);
@@ -101,7 +101,7 @@ const MENU_ITEMS_DEFAULT = {
     },
   },
   clearBorderColor: {
-    text: '清除边框颜色',
+    text: 'Kenarlık rengini temizle',
     handler() {
       const tableModule = this.quill.getModule(moduleName.table);
       tableModule.setStyle({ borderColor: null }, this.selectedTds);
@@ -114,11 +114,11 @@ const MENU_MIN_HEIHGT = 150;
   options = {
     items: {
       functionName: {
-        text: '显示文字',
-        handle() {},    // 触发事件
-        iconSrc: string,    // icon url
-        groupEnd: boolean, // 是否显示分隔线
-        subTitle: '显示子标题',
+        text: 'Görüntülenen metin',
+        handle() {},    // tetikleme olayı
+        iconSrc: string,    // ikon url'si
+        groupEnd: boolean, // ayırıcı çizgi göster
+        subTitle: 'Alt başlık göster',
       }
     }
   }
