@@ -31,7 +31,7 @@
   const randomId = () => Math.random().toString(36).slice(2);
 
   let zindex = 8000;
-  const dialog = ({ child, target = document.body, beforeClose = () => {} } = {}) => {
+  const dialog = ({ child, target = document.body, beforeClose = () => { } } = {}) => {
     const appendTo = target;
     const dialog = document.createElement('div');
     dialog.classList.add('dialog');
@@ -54,7 +54,11 @@
 
     appendTo.appendChild(dialog);
     const close = () => {
-      beforeClose();
+      try {
+        beforeClose();
+      } catch (error) {
+        console.error('Error in beforeClose:', error.message);
+      }
       dialog.remove();
       appendTo.style.overflow = originOverflow;
     };
@@ -183,23 +187,29 @@
     box.appendChild(control);
 
     return new Promise((resolve, reject) => {
-      const { close } = dialog({ child: box, beforeClose: reject });
+      const { close } = dialog({
+        child: box,
+        beforeClose: () => reject(new Error('Table creation was cancelled by the user'))
+      });
 
       confirmBtn.addEventListener('click', async () => {
         const row = Number(rowInput.value);
         const col = Number(colInput.value);
 
         if (Number.isNaN(row) || row <= 0) {
-          return rowErrorTip('Invalid number');
+          rowErrorTip('Invalid number');
+          return;
         }
         if (Number.isNaN(col) || col <= 0) {
-          return colErrorTip('Invalid number');
+          colErrorTip('Invalid number');
+          return;
         }
         resolve({ row, col });
         close();
       });
+
       cancelBtn.addEventListener('click', () => {
-        close();
+        close(); // Bu, beforeClose'u tetikleyecek ve Promise'i reddedecek
       });
     });
   };
@@ -272,9 +282,14 @@
     });
 
     selectCustom.addEventListener('click', () => {
-      showTableCreator().then(({ row, col }) => {
-        sendTableData({ row, col });
-      });
+      showTableCreator()
+        .then(({ row, col }) => {
+          sendTableData({ row, col });
+        })
+        .catch(error => {
+          console.log('Table creation cancelled or failed:', error);
+          // Burada uygun bir hata işleme mekanizması ekleyebilirsiniz
+        });
     });
 
     return selectDom;

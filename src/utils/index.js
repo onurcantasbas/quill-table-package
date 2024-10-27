@@ -4,7 +4,7 @@ import { CREATE_TABLE } from '../assets/const';
 export const randomId = () => Math.random().toString(36).slice(2);
 
 let zindex = 8000;
-export const dialog = ({ child, target = document.body, beforeClose = () => {} } = {}) => {
+export const dialog = ({ child, target = document.body, beforeClose = () => { } } = {}) => {
   const appendTo = target;
   const dialog = document.createElement('div');
   dialog.classList.add('dialog');
@@ -27,7 +27,11 @@ export const dialog = ({ child, target = document.body, beforeClose = () => {} }
 
   appendTo.appendChild(dialog);
   const close = () => {
-    beforeClose();
+    try {
+      beforeClose();
+    } catch (error) {
+      console.error('Error in beforeClose:', error.message);
+    }
     dialog.remove();
     appendTo.style.overflow = originOverflow;
   };
@@ -156,23 +160,29 @@ export const showTableCreator = async (row = 3, col = 3) => {
   box.appendChild(control);
 
   return new Promise((resolve, reject) => {
-    const { close } = dialog({ child: box, beforeClose: reject });
+    const { close } = dialog({
+      child: box,
+      beforeClose: () => reject(new Error('Table creation was cancelled by the user'))
+    });
 
     confirmBtn.addEventListener('click', async () => {
       const row = Number(rowInput.value);
       const col = Number(colInput.value);
 
       if (Number.isNaN(row) || row <= 0) {
-        return rowErrorTip('Invalid number');
+        rowErrorTip('Invalid number');
+        return;
       }
       if (Number.isNaN(col) || col <= 0) {
-        return colErrorTip('Invalid number');
+        colErrorTip('Invalid number');
+        return;
       }
       resolve({ row, col });
       close();
     });
+
     cancelBtn.addEventListener('click', () => {
-      close();
+      close(); // Bu, beforeClose'u tetikleyecek ve Promise'i reddedecek
     });
   });
 };
@@ -245,9 +255,14 @@ export const showTableSelector = (customButton) => {
   });
 
   selectCustom.addEventListener('click', () => {
-    showTableCreator().then(({ row, col }) => {
-      sendTableData({ row, col });
-    });
+    showTableCreator()
+      .then(({ row, col }) => {
+        sendTableData({ row, col });
+      })
+      .catch(error => {
+        console.log('Table creation cancelled or failed:', error);
+        // Burada uygun bir hata işleme mekanizması ekleyebilirsiniz
+      });
   });
 
   return selectDom;
@@ -325,3 +340,5 @@ export function debounce(func, wait) {
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
+
+
